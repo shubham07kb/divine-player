@@ -1,0 +1,18 @@
+name: Lint and Style Check
+on:
+  pull_request:
+
+jobs:
+  lint-and-style:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Out Code
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - name: Install Dependencies
+        run: npm install
+      - name: ESLint and StyleLint
+        run: npm run lint
