@@ -4,6 +4,7 @@
   "parserOptions": {
     "ecmaVersion": "latest"
   },
+  "rules": {},
   "env": {
     "browser": true,
     "es6": true
