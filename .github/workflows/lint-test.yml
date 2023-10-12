@@ -17,38 +17,18 @@ jobs:
       - name: Install Dependencies
         run: npm install
       - name: ESLint and StyleLint
-        run: npm run lint
-      - name: Add ESLint and StyleLint comments to PR
-        uses: github-actions/github-script@v5
+        run: |
+          eslintOutput=$(npm run eslint-command)
+          stylelintOutput=$(npm run stylelint-command)
+
+          echo "::set-output name=eslintOutput::$eslintOutput"
+          echo "::set-output name=stylelintOutput::$stylelintOutput"
+
+      - name: Post ESLint and StyleLint comments to PR
+        uses: softprops/action-gh-release@v1
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            const { execSync } = require('child_process');
-            const eslintOutput = execSync('npm run eslint-command', { encoding: 'utf8' });
-            const stylelintOutput = execSync('npm run stylelint-command', { encoding: 'utf8' });
-
-            const commentBody = `**ESLint Errors and Warnings:**\n\`\`\`\n${eslintOutput}\n\`\`\`\n\n**StyleLint Errors and Warnings:**\n\`\`\`\n${stylelintOutput}\n\`\`\``;
-
-            const { data: comments } = await github.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-            });
-
-            const existingComment = comments.find(comment => comment.user.login === 'github-actions[bot]' && comment.body.includes('**ESLint Errors and Warnings:'));
-
-            if (existingComment) {
-              await github.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: existingComment.id,
-                body: commentBody,
-              });
-            } else {
-              await github.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                body: commentBody,
-              });
-            }
+          files: |
+            ${{ steps.lint-and-style.outputs.eslintOutput }}
+            ${{ steps.lint-and-style.outputs.stylelintOutput }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
