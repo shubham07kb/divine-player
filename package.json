@@ -31,7 +31,6 @@
   "homepage": "https://github.com/shubham07kb/divine-player#readme",
   "devDependencies": {
     "eslint": "^8.51.0",
-    "lighthouse-ci": "^1.13.1",
     "stylelint": "^15.10.3"
   }
 }
