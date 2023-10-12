@@ -1,3 +1,4 @@
 {
-  "rules": {}
+  "rules": {},
+  "ignoreFiles": ["**/*.js", "**/*.html", "**/*.json", "!**/*.{css,scss}"]
 }

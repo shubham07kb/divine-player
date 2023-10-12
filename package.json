@@ -4,8 +4,7 @@
   "description": "Multi Function Player",
   "main": "app.js",
   "scripts": {
-    "lint": "eslint . && stylelint .",
-    "lighthouse": "lighthouse-ci"
+    "lint": "eslint . && stylelint ."
   },
   "repository": {
     "type": "git",
