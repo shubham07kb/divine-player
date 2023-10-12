@@ -1,8 +1,6 @@
 name: Lint and Style Check
 on:
   pull_request:
-    paths:
-      - "**.js" # Adjust the file patterns as needed
 
 jobs:
   lint-and-style:
@@ -13,22 +11,20 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 14 # Adjust the Node.js version
+          node-version: 14
       - name: Install Dependencies
         run: npm install
       - name: ESLint and StyleLint
-        run: |
-          eslintOutput=$(npm run eslint-command)
-          stylelintOutput=$(npm run stylelint-command)
-
-          echo "::set-output name=eslintOutput::$eslintOutput"
-          echo "::set-output name=stylelintOutput::$stylelintOutput"
-
-      - name: Post ESLint and StyleLint comments to PR
-        uses: softprops/action-gh-release@v1
+        run: npm run lint
+        # Capture the output of the lint and style checks
+        id: lint-and-style
+        outputs:
+          output: ${{ steps.lint-and-style.stdout }}
+      - name: Post Comment
+        uses: actions/github-script@v3
         with:
-          files: |
-            ${{ steps.lint-and-style.outputs.eslintOutput }}
-            ${{ steps.lint-and-style.outputs.stylelintOutput }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              body: `The lint and style checks have completed. Output:\n\n${{ needs.lint-and-style.outputs.output }}`
+            })
