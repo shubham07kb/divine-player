@@ -31,6 +31,7 @@
   "homepage": "https://github.com/shubham07kb/divine-player#readme",
   "devDependencies": {
     "eslint": "^8.51.0",
+    "eslint-config-google": "^0.14.0",
     "stylelint": "^15.10.3"
   }
 }
