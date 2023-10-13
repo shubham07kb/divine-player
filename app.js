@@ -1,5 +1,31 @@
 // app player
 const videoWorks = !!document.createElement('video').canPlayType;
+const playSvg = `<svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="#fff"
+                height="100%"
+                width="100%"
+                viewBox="0 0 24 24"
+                enable-background="new 0 0 24 24"
+                >
+                <g>
+                <path 
+                d="M6,4l12,8L6,20V4z"
+                >
+                </path>
+                </g>
+                </svg>`;
+const pauseSvg = `<svg
+                  version="1.1"
+                  viewBox="0 0 36 36"
+                  fill="#fff" height="100%"
+                  width="100%"
+                  >
+                  <path
+                  d="M 12,26 16,26 16,10 12,10 z M 21,26 25,26 25,10 21,10 z"
+                  >
+                  </path>
+                  </svg>`;
 
 if (videoWorks) {
   const videoElements = document.querySelectorAll('video.vid');
@@ -48,22 +74,7 @@ if (videoWorks) {
                   </div>
                   <div></div>
                   <div class="play first" id="start${index}">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="#fff" height="100%" width="100%" viewBox="0 0 24 24" enable-background="new 0 0 24 24">
-                      <g><path d="M6,4l12,8L6,20V4z"></path></g>
-                    </svg>
-                    <svg
-                      version="1.1"
-                      viewBox="0 0 36 36"
-                      fill="#fff"
-                      height="100%"
-                      width="100%">
-                      <use class="ytp-svg-shadow" xlink:href="#ytp-id-1235">
-                      </use>
-                      <path 
-                        class="ytp-svg-fill"
-                    d="M 12,26 16,26 16,10 12,10 z M 21,26 25,26 25,10 21,10 z">
-                      </path>
-                    </svg>
+                    ${playSvg}
                   </div>
                   <div></div>
                   <div class="next${playerConfig.pnbutton ? '' : ' hidden'}">
@@ -80,18 +91,9 @@ if (videoWorks) {
             <div class="play-line"></div>
             <div class="main-control">
               <div class="main-left">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="#fff" height="100%" width="100%" viewBox="0 0 24 24" enable-background="new 0 0 24 24">
-                  <g><path d="M6,4l12,8L6,20V4z"></path></g>
-                </svg>
-                  <use class="ytp-svg-shadow" xlink:href="#ytp-id-1235"></use>
-                  <path 
-                    class="ytp-svg-fill" 
-                    d="M 12,26 16,26 16,10 12,10 z M 21,26 25,26 25,10 21,10 z" 
-                    id="ytp-id-1235">
-                  </path>
-                </svg>
+                  <div class="start-main${index}"></div>
               </div>
-              <div class="">
+              <div class="main-right">
               </div>
             </div>
           </div>
@@ -117,10 +119,16 @@ if (videoWorks) {
  */
 function togglePlay(index) {
   const play = document.getElementById('play' + index);
+  const start = document.getElementById('start' + index);
+  const startMain = document.querySelector('.start-main' + index);
   if (play.paused || play.ended) {
     play.play();
+    start.innerHTML = pauseSvg;
+    startMain.innerHTML = pauseSvg;
   } else {
     play.pause();
+    start.innerHTML = playSvg;
+    startMain.innerHTML = playSvg;
   }
 }
 
