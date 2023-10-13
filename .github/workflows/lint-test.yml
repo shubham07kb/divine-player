@@ -16,15 +16,3 @@ jobs:
         run: npm install
       - name: ESLint and StyleLint
         run: npm run lint
-        # Capture the output of the lint and style checks
-        id: lint-and-style
-        outputs:
-          output: ${{ steps.lint-and-style.stdout }}
-      - name: Post Comment
-        uses: actions/github-script@v3
-        with:
-          script: |
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              body: `The lint and style checks have completed. Output:\n\n${{ needs.lint-and-style.outputs.output }}`
-            })
