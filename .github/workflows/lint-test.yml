@@ -1,9 +1,9 @@
-name: Lighthouse Check
+name: Lint and Style Check
 on:
   pull_request:
 
 jobs:
-  lighthouse:
+  lint-and-style:
     runs-on: ubuntu-latest
     steps:
       - name: Check Out Code
@@ -11,8 +11,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 18
       - name: Install Dependencies
         run: npm install
-      - name: Lighthouse Audit
-        run: npm run lighthouse
+      - name: ESLint and StyleLint
+        run: npm run lint
