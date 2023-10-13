@@ -88,6 +88,9 @@ if (videoWorks) {
                 <div class="right"></div>
               </div>
             </div>
+            <div class="player-time">
+            <div id="play-time${index}"></div>/<div id="duration${index}"></div>
+            </div>
             <div class="play-line"></div>
             <div class="main-control">
               <div class="main-left">
@@ -121,6 +124,8 @@ function togglePlay(index) {
   const play = document.getElementById('play' + index);
   const start = document.getElementById('start' + index);
   const startMain = document.querySelector('.start-main' + index);
+  document.getElementById('duration'+index).
+      innerHTML=(formatPlayerTime(play.duration));
   if (play.paused || play.ended) {
     play.play();
     start.innerHTML = pauseSvg;
@@ -141,4 +146,55 @@ function startPlay(index) {
   document.getElementById('video-controls' + index).classList.remove('start');
   document.addEventListener('video' + index, () => togglePlay(index));
   togglePlay(index);
+}
+
+/**
+ * Format Player Time
+ *
+ * @param {number} time Time in Seconds
+ *
+ * @return {string} time in format 00:00:00
+ */
+function formatPlayerTime(time) {
+  let inSet;
+  let timeString=0;
+  // Ensure the input time is a positive number
+  if (typeof time !== 'number' || time < 0) {
+    throw new Error('Invalid input.');
+  }
+
+  const timeArr = [
+    Math.floor(time / 604800),
+    Math.floor((time / 86400) % 7),
+    Math.floor((time / 3600) % 24),
+    Math.floor((time / 60) % 60),
+    Math.floor(time % 60),
+  ];
+  inSet=0;
+  if (timeArr[0]!==0 || timeArr[1]!==0) {
+    inSet=1;
+  }
+  timeString= (timeArr[0]!==0 ? timeArr[0].toString()+ ':' : '') +
+              (timeArr[1]!==0 ? timeArr[1].toString()+ ':' : '');
+  if (timeArr[2]!==0 || inSet===1) {
+    timeString+=(
+      inSet===1?
+      timeArr[2].toString().padStart(2, '0'):
+      timeArr[2].toString())+':';
+    inSet=1;
+  }
+  if (timeArr[3]!==0 || inSet===1) {
+    timeString+=(
+      inSet===1?
+      timeArr[3].toString().padStart(2, '0'):
+      timeArr[3].toString())+':';
+    inSet=1;
+  }
+  if (timeArr[4]!==0 || inSet===1) {
+    timeString+=inSet===1?
+    timeArr[4].toString().padStart(2, '0'):
+    timeArr[4].toString();
+    inSet=1;
+  }
+  return timeString;
 }
